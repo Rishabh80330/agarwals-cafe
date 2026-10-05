@@ -58,6 +58,12 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
+    discount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+
     tax: {
       type: Number,
       default: 0,
@@ -66,6 +72,12 @@ const orderSchema = new mongoose.Schema(
     total: {
       type: Number,
       required: true,
+    },
+
+    rewardRedemption: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "RewardRedemption",
+      default: null,
     },
 
     orderType: {
@@ -91,6 +103,21 @@ const orderSchema = new mongoose.Schema(
       type: String,
       enum: ["pending", "paid", "failed"],
       default: "pending",
+    },
+
+    razorpayOrderId: {
+      type: String,
+      default: null,
+    },
+
+    razorpayPaymentId: {
+      type: String,
+      default: null,
+    },
+
+    razorpaySignature: {
+      type: String,
+      default: null,
     },
 
     orderStatus: {
