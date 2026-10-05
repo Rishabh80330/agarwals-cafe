@@ -6,10 +6,27 @@ const register = async (req, res) => {
   try {
     const { name, email, phone, password } = req.body;
 
-    if (!name || !email || !password) {
+    if (!name || !email || !phone || !password) {
       return res.status(400).json({
         success: false,
-        message: "Name, email and password are required",
+        message: "Name, email, phone and password are required",
+      });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 8 characters long.",
+      });
+    }
+
+    // Validate Indian mobile number
+    const phoneRegex = /^[6-9]\d{9}$/;
+
+    if (!phoneRegex.test(phone)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid 10-digit Indian mobile number.",
       });
     }
 

@@ -7,14 +7,22 @@ const User = require("./models/User");
 
 const resetAdmin = async () => {
   try {
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminPassword = process.env.ADMIN_PASSWORD;
+
+    if (!adminEmail || !adminPassword) {
+      console.error(
+        "ADMIN_EMAIL and ADMIN_PASSWORD environment variables are required."
+      );
+      process.exit(1);
+    }
+
     await mongoose.connect(process.env.MONGO_URI);
 
-    const newPassword = "CafeAdmin@2026"; // Change this to your desired password
-
-    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    const hashedPassword = await bcrypt.hash(adminPassword, 12);
 
     const admin = await User.findOneAndUpdate(
-      { email: "admin@agarwalscafe.com" },
+      { email: adminEmail },
       {
         password: hashedPassword,
         role: "admin",
@@ -28,7 +36,7 @@ const resetAdmin = async () => {
     }
 
     console.log("Admin password reset successfully.");
-    console.log("Email: admin@agarwalscafe.com");
+    console.log(`Email: ${adminEmail}`);
 
     await mongoose.disconnect();
     process.exit(0);
